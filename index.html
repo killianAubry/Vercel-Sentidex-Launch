@@ -193,7 +193,6 @@
     nav {
       display: flex;
       align-items: center;
-      justify-content: space-between;
       padding: 18px 32px;
       position: relative;
       z-index: 10;
@@ -201,6 +200,8 @@
       background: #0d111799;
       backdrop-filter: blur(12px);
       flex-shrink: 0;
+      align-items: center;
+      justify-content: center;
     }
 
     .nav-brand {
@@ -262,6 +263,67 @@
     .nav-cta:hover { opacity: 0.9; transform: translateY(-1px); }
     .nav-cta.active { background: linear-gradient(135deg, var(--bubblegum-pink), var(--vintage-berry)) !important; }
     .nav-cta::after { display: none !important; }
+
+    /* ── Hamburger ── */
+    .nav-hamburger {
+      display: none;
+      flex-direction: column;
+      justify-content: center;
+      gap: 5px;
+      background: none;
+      border: none;
+      cursor: pointer;
+      padding: 6px;
+      border-radius: 8px;
+      transition: background 0.2s;
+    }
+    .nav-hamburger:hover { background: #ffffff10; }
+    .nav-hamburger span {
+      display: block;
+      width: 22px;
+      height: 2px;
+      background: #a8b2c8;
+      border-radius: 2px;
+      transition: all 0.25s;
+    }
+    .nav-hamburger.open span:nth-child(1) { transform: translateY(7px) rotate(45deg); }
+    .nav-hamburger.open span:nth-child(2) { opacity: 0; transform: scaleX(0); }
+    .nav-hamburger.open span:nth-child(3) { transform: translateY(-7px) rotate(-45deg); }
+
+    /* ── Mobile nav drawer ── */
+    .nav-drawer {
+      display: none;
+      flex-direction: column;
+      gap: 4px;
+      padding: 12px 16px 16px;
+      background: #0d1117f5;
+      backdrop-filter: blur(16px);
+      border-bottom: 1px solid #ffffff0a;
+      position: relative;
+      z-index: 9;
+    }
+    .nav-drawer.open { display: flex; }
+    .nav-drawer button {
+      background: none;
+      border: none;
+      color: #8892a4;
+      font-size: 0.9rem;
+      font-weight: 500;
+      padding: 10px 14px;
+      border-radius: 8px;
+      cursor: pointer;
+      text-align: left;
+      font-family: 'Inter', sans-serif;
+      transition: all 0.2s;
+    }
+    .nav-drawer button:hover { color: #fff; background: #ffffff10; }
+    .nav-drawer button.active { color: #fff; background: var(--deep-space-blue); border: 1px solid #ffffff15; }
+    .nav-drawer .nav-cta {
+      background: linear-gradient(135deg, var(--bubblegum-pink), var(--vintage-berry)) !important;
+      color: #fff !important;
+      margin-top: 4px;
+      text-align: center !important;
+    }
 
     /* ── Globe wrapper ── */
     .globe-wrapper {
@@ -451,6 +513,51 @@
     }
     .stat-label { font-size: 0.7rem; color: #8892a4; text-transform: uppercase; letter-spacing: 0.08em; margin-top: 2px; }
     .stat-divider { width: 1px; background: #ffffff12; align-self: stretch; }
+
+    /* ════════════════════════════════
+       MOBILE RESPONSIVE
+    ════════════════════════════════ */
+    @media (max-width: 600px) {
+      nav {
+        padding: 12px 16px;
+      }
+      .nav-links { display: none; }
+      .nav-hamburger { display: flex; }
+      .nav-brand {
+        font-size: 1rem;
+        margin: -12px;
+      }
+      .nav-logo {
+        width: 52px;
+        height: 52px;
+      }
+
+      .node-callout {
+        width: 210px;
+      }
+      .callout-card {
+        padding: 13px 14px;
+      }
+      .callout-title { font-size: 0.88rem; }
+      .callout-body  { font-size: 0.72rem; margin-bottom: 9px; }
+      .callout-items li { font-size: 0.70rem; }
+      .callout-city-label { font-size: 0.65rem; margin-top: 10px; }
+
+      .info-panel {
+        gap: 12px;
+        padding: 10px 14px;
+        bottom: 12px;
+        white-space: nowrap;
+      }
+      .stat-value { font-size: 1.05rem; }
+      .stat-label { font-size: 0.6rem; }
+    }
+
+    @media (max-width: 380px) {
+      .node-callout { width: 180px; }
+      .info-panel { gap: 8px; padding: 8px 10px; }
+      .stat-value { font-size: 0.9rem; }
+    }
   </style>
 </head>
 <body>
@@ -1214,16 +1321,28 @@
               C671.319946,335.177856 673.372009,337.583710 673.151001,341.785553 
             z"/>
             </svg>
-          </div>
-        Sentidex
+        </div>
       </div>
+
+      <!-- Desktop links -->
       <div class="nav-links">
         <button id="btn-about"    onclick="triggerCallout('about')">About</button>
         <button id="btn-features" onclick="triggerCallout('features')">Features</button>
         <button id="btn-how"      onclick="triggerCallout('how')">How it Works</button>
         <button class="nav-cta"   onclick="openAccess()">Get Access</button>
       </div>
+      <!-- Hamburger toggle -->
+      <button class="nav-hamburger" id="nav-hamburger" onclick="toggleDrawer()" aria-label="Menu">
+        <span></span><span></span><span></span>
+      </button>
     </nav>
+    <!-- Mobile drawer (sits just below nav, inside globe-section) -->
+    <div class="nav-drawer" id="nav-drawer">
+      <button id="btn-about-m"    onclick="triggerCallout('about');    closeDrawer()">About</button>
+      <button id="btn-features-m" onclick="triggerCallout('features'); closeDrawer()">Features</button>
+      <button id="btn-how-m"      onclick="triggerCallout('how');      closeDrawer()">How it Works</button>
+      <button class="nav-cta"     onclick="openAccess();               closeDrawer()">Get Access</button>
+    </div>
 
     <div class="globe-wrapper" id="globe-wrapper">
       <svg id="globe-svg"></svg>
@@ -1307,30 +1426,24 @@
 <script>
 // ── City data ──
 const CITIES = [
-  { name:"New York",    lat:40.71,  lon:-74.01, sentiment:0.72, volume:"$2.4T" },
-  { name:"London",      lat:51.51,  lon:-0.13,  sentiment:0.65, volume:"$1.8T" },
-  { name:"Tokyo",       lat:35.68,  lon:139.69, sentiment:0.81, volume:"$1.2T" },
-  { name:"Shanghai",    lat:31.23,  lon:121.47, sentiment:0.58, volume:"$980B" },
-  { name:"Hong Kong",   lat:22.32,  lon:114.17, sentiment:0.69, volume:"$740B" },
-  { name:"Singapore",   lat:1.35,   lon:103.82, sentiment:0.76, volume:"$620B" },
-  { name:"Frankfurt",   lat:50.11,  lon:8.68,   sentiment:0.61, volume:"$540B" },
-  { name:"Sydney",      lat:-33.87, lon:151.21, sentiment:0.74, volume:"$410B" },
-  { name:"Toronto",     lat:43.65,  lon:-79.38, sentiment:0.68, volume:"$380B" },
-  { name:"Dubai",       lat:25.20,  lon:55.27,  sentiment:0.79, volume:"$290B" },
-  { name:"Mumbai",      lat:19.08,  lon:72.88,  sentiment:0.55, volume:"$260B" },
-  { name:"São Paulo",   lat:-23.55, lon:-46.63, sentiment:0.62, volume:"$220B" },
+  { name:"New York", lat:40.71,  lon:-74.01, sentiment:0.72, volume:"$2.4T", calloutId: "about" },
+  { name:"London",   lat:51.51,  lon:-0.13,  sentiment:0.65, volume:"$1.8T", calloutId: "how" },
+  { name:"Tokyo",    lat:35.68,  lon:139.69, sentiment:0.81, volume:"$1.2T", calloutId: "features" },
 ];
 
-const ARCS = [
-  [0,1],[0,2],[1,2],[1,6],[2,3],[2,4],[3,4],[4,5],[5,7],[5,9],[6,0],[7,8],[8,0],[9,10],[10,11]
-];
+const ARCS = [[0,1],[0,2]]; // precompute all unique city pairs for arcs
 
 // ── Callout config: which city index each nav button targets ──
 const CALLOUT_CONFIG = {
-  about:    { cityIndex: 0,  calloutId: 'callout-about',    btnId: 'btn-about'    },
-  features: { cityIndex: 2,  calloutId: 'callout-features', btnId: 'btn-features' },
-  how:      { cityIndex: 1,  calloutId: 'callout-how',      btnId: 'btn-how'      },
+  about:    { cityIndex: 0, calloutId: 'callout-about',    btnId: 'btn-about'    },
+  how:      { cityIndex: 1, calloutId: 'callout-how',      btnId: 'btn-how'      },
+  features: { cityIndex: 2, calloutId: 'callout-features', btnId: 'btn-features' },
 };
+
+// ── Reverse lookup: cityIndex → callout key ──
+const CITY_TO_CALLOUT = Object.fromEntries(
+  Object.entries(CALLOUT_CONFIG).map(([key, cfg]) => [cfg.cityIndex, key])
+);
 
 // ── State ──
 let activeCallout = null;   // key of currently open callout
@@ -1381,7 +1494,7 @@ const aGrad = defs.append("linearGradient").attr("id","arcGrad").attr("x1","0%")
 aGrad.append("stop").attr("offset","0%").attr("stop-color","#944062").attr("stop-opacity","0.8");
 aGrad.append("stop").attr("offset","100%").attr("stop-color","#ff9678").attr("stop-opacity","0.8");
 
-// ── Globe layers ──
+/* ── Globe layers ── */
 const globeGroup    = svg.append("g");
 const sphereCircle  = globeGroup.append("circle")
   .attr("cx", cx).attr("cy", cy).attr("r", radius)
@@ -1396,7 +1509,7 @@ const landPath      = globeGroup.append("path")
 const arcLayer      = globeGroup.append("g").attr("class","arc-layer");
 const nodeLayer     = globeGroup.append("g").attr("class","node-layer");
 
-// ── Load world ──
+/* ── Load world ── */
 d3.json("https://cdn.jsdelivr.net/npm/world-atlas@2/countries-110m.json").then(world => {
   worldData = world;
   landPath.datum(topojson.feature(world, world.objects.countries));
@@ -1404,7 +1517,7 @@ d3.json("https://cdn.jsdelivr.net/npm/world-atlas@2/countries-110m.json").then(w
   startLoop();
 });
 
-// ── Render frame ──
+/* ── Render frame ── */
 function render() {
   projection.rotate([rotateX, rotateY]);
   graticulePath.attr("d", path(graticule()));
@@ -1414,7 +1527,7 @@ function render() {
   if (activeCallout) updateCalloutPosition(activeCallout);
 }
 
-// ── Arcs ──
+/* ── Arcs ── */
 function getArcGeo(a, b) {
   const interp = d3.geoInterpolate([a.lon, a.lat], [b.lon, b.lat]);
   return { type:"LineString", coordinates: d3.range(0,1.01,0.02).map(t => interp(t)) };
@@ -1436,7 +1549,7 @@ function drawArcs() {
   });
 }
 
-// ── Nodes ──
+/* ── Nodes ── */
 function isVisible(city) {
   const [rx, ry] = projection.rotate();
   const lonR = city.lon + rx;
@@ -1452,19 +1565,21 @@ function drawNodes() {
     if (!proj || !isVisible(city)) return;
     const [x, y] = proj;
 
+    const calloutKey  = CITY_TO_CALLOUT[i];
+    const isActiveNode = activeCallout && CALLOUT_CONFIG[activeCallout].cityIndex === i;
+
     const g = nodeLayer.append("g")
       .attr("class","node-g")
       .attr("data-city", i)
-      .attr("transform",`translate(${x},${y})`);
-
-    // check if this city is the active callout target
-    const isActiveNode = activeCallout && CALLOUT_CONFIG[activeCallout].cityIndex === i;
+      .attr("transform",`translate(${x},${y})`)
+      .attr("cursor", "pointer")
+      .on("click", () =>  triggerCallout(city.calloutId)); // placeholder for potential future click action
 
     // pulse ring
     g.append("circle")
       .attr("r", isActiveNode ? 14 : 10)
       .attr("fill","none")
-      .attr("stroke", isActiveNode ? "#f54768" : "#f54768")
+      .attr("stroke","#f54768")
       .attr("stroke-width", isActiveNode ? 2 : 1)
       .attr("stroke-opacity", isActiveNode ? 0.9 : 0.5)
       .attr("class","pulse-ring");
@@ -1485,18 +1600,18 @@ function drawNodes() {
       .attr("fill", isActiveNode ? "#f54768" : col)
       .attr("stroke", isActiveNode ? "#ffffff90" : "#ffffff40")
       .attr("stroke-width", isActiveNode ? 1.5 : 1)
-      .attr("cursor","pointer")
-      .on("mouseover", (event) => {
-        tt.querySelector(".tt-city").textContent = city.name;
-        tt.querySelector(".tt-sentiment").textContent = `${Math.round(city.sentiment*100)}%`;
-        tt.querySelector(".tt-volume").textContent = city.volume;
-        tt.classList.add("visible");
-      })
-      .on("mousemove", (event) => {
-        tt.style.left = (event.clientX + 14) + "px";
-        tt.style.top  = (event.clientY - 36) + "px";
-      })
-      .on("mouseout", () => tt.classList.remove("visible"));
+      .on("click", () =>  triggerCallout(city.calloutId));
+
+    // label under the node
+    g.append("text")
+      .attr("y", 18)
+      .attr("text-anchor","middle")
+      .attr("fill", isActiveNode ? "#f54768" : "#ffffff60")
+      .attr("font-size", "9px")
+      .attr("font-family","Inter, sans-serif")
+      .attr("letter-spacing","0.06em")
+      .attr("pointer-events","none")
+      .text(city.name.toUpperCase());
   });
 
   // pulse animations
@@ -1505,14 +1620,14 @@ function drawNodes() {
     const baseR = +ring.attr("r");
     (function pulse() {
       ring.attr("r", baseR).attr("stroke-opacity", 0.7)
-        .transition().duration(1600).delay(i * 100)
+        .transition().duration(1600).delay(i * 200)
         .attr("r", baseR + 10).attr("stroke-opacity", 0)
         .on("end", pulse);
     })();
   });
 }
 
-// ── Callout positioning ──
+/* ── Callout positioning ── */
 function getNodeScreenPos(cityIndex) {
   const city = CITIES[cityIndex];
   const projected = projection([city.lon, city.lat]);
@@ -1544,27 +1659,34 @@ function updateCalloutPosition(key) {
   }
 
   const wrapRect = wrapper.getBoundingClientRect();
-  const cardW    = 260;
+  const cardW    = el.offsetWidth  || 260;
   const cardH    = el.offsetHeight || 220;
+  const margin   = 8;
 
-  // Decide which side to place the card: left or right of the node
+  // Decide which side to place the card
   const placeLeft = pos.x > wrapRect.width * 0.55;
-  const offsetX   = placeLeft ? -(cardW + 24) : 24;
+  const offsetX   = placeLeft ? -(cardW + 20) : 20;
   const offsetY   = -cardH / 2;
 
-  const cardX = pos.x + offsetX;
-  const cardY = Math.max(8, Math.min(pos.y + offsetY, wrapRect.height - cardH - 8));
+  // Clamp so card stays within wrapper bounds
+  const cardX = Math.max(margin, Math.min(
+    pos.x + offsetX,
+    wrapRect.width - cardW - margin
+  ));
+  const cardY = Math.max(margin, Math.min(
+    pos.y + offsetY,
+    wrapRect.height - cardH - margin
+  ));
 
   el.style.left = cardX + "px";
   el.style.top  = cardY + "px";
 
-  // Draw connector line
+  // Connector line endpoint snaps to actual card edge
   const lineStartX = pos.x;
   const lineStartY = pos.y;
   const lineEndX   = placeLeft ? cardX + cardW : cardX;
   const lineEndY   = cardY + cardH / 2;
 
-  // Bezier control point
   const cpX = (lineStartX + lineEndX) / 2;
   const cpY = lineStartY;
 
@@ -1602,7 +1724,18 @@ function hideCallout(key) {
   document.getElementById("callout-lines").innerHTML = "";
 }
 
-// ── Globe rotation to target ──
+function toggleDrawer() {
+  const drawer = document.getElementById("nav-drawer");
+  const btn    = document.getElementById("nav-hamburger");
+  const open   = drawer.classList.toggle("open");
+  btn.classList.toggle("open", open);
+}
+function closeDrawer() {
+  document.getElementById("nav-drawer").classList.remove("open");
+  document.getElementById("nav-hamburger").classList.remove("open");
+}
+
+/* ── Globe rotation to target ── */
 function rotateTo(lon, lat, onDone) {
   autoRotate  = false;
   isAnimating = true;
@@ -1644,7 +1777,7 @@ function rotateTo(lon, lat, onDone) {
   requestAnimationFrame(step);
 }
 
-// ── Main callout trigger ──
+/* ── Main callout trigger ── */
 function triggerCallout(key) {
   const cfg     = CALLOUT_CONFIG[key];
   const btnId   = cfg.btnId;
@@ -1683,7 +1816,7 @@ function openAccess() {
   alert("Get Access — coming soon!");
 }
 
-// ── Auto-rotate loop ──
+/* ── Auto-rotate loop ── */
 let lastTime = 0;
 function startLoop() {
   function frame(now) {
@@ -1700,7 +1833,7 @@ function startLoop() {
   requestAnimationFrame(frame);
 }
 
-// ── Drag ──
+/* ── Drag ── */
 svg.call(d3.drag()
   .on("start", () => {
     autoRotate  = false;
@@ -1719,7 +1852,7 @@ svg.call(d3.drag()
   .on("end", () => { setTimeout(() => autoRotate = true, 2500); })
 );
 
-// ── Resize ──
+/* ── Resize ── */
 window.addEventListener("resize", () => {
   size   = getSize();
   radius = size * 0.42;
